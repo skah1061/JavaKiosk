@@ -4,24 +4,27 @@ import Menu.SideMenu;
 import Menu.Menu;
 import java.util.ArrayList;
 import java.util.*;
-enum status{
+enum status{    //상태를 나타낸 enum
     CATEGORY,
     MENU,
     ORDER,
+    ADMIN,
 }
 
 public class McKiosk {
     int num;
-    Menu menu = new Menu();
-    ArrayList<Order> shoppingBag = new ArrayList<Order>();
-    static status stat = status.CATEGORY;
-    int watingCnt = 0;
+    Menu menu = new Menu();     //메뉴들을 포함
+    ArrayList<Order> shoppingBag = new ArrayList<Order>();      //장바구니
+    static status stat = status.CATEGORY;          //최초 상태는 카테고리
+    int watingCnt = 0;                      //주문 대기표
 
+    int totalProfit = 0;
+    ArrayList<Order> sellingFood = new ArrayList<Order>();  //총 판매된 음식 리스트
     public McKiosk() {
 
     }
 
-    public void KioskUse() throws InterruptedException {
+    public void KioskUse() throws InterruptedException {    //상태에 따라 함수를 출력해준다.
 
         if (stat == status.CATEGORY) {
             chooseCategory();
@@ -31,17 +34,47 @@ public class McKiosk {
         }
         else if(stat == status.ORDER){
             showOrder();
-            Thread.sleep(3000);
+
+        }
+        else if (stat== status.ADMIN){
+            showAdminstor();
         }
 
 
     }
-    public void showOrder() {
+    public void showAdminstor(){    //Admin페이지
+        System.out.println("===총 판매 현황===");
+        for(Order food:sellingFood){
+            System.out.println(food.menuName+" -- W"+food.price);
+        }
+
+        System.out.println("총 수익 : W"+ totalProfit);
+        System.out.println("메뉴판으로 나가려면 아무키나 입력하세요.");
+        choose();
+        stat = status.CATEGORY;
+    }
+    public void showOrder() throws InterruptedException {           //주문목록을 보여주고 주문할 수 있는 함수
         int sum = 0;
         System.out.println("========장바구니========");
-        for (Order bag:shoppingBag){
-            bag.showOrderList();
-            sum += bag.getPrice();
+
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        for(Order bag:shoppingBag){
+            Integer cnt =  map.get(bag.menuName);
+            if(cnt==null)
+                map.put(bag.menuName,1);
+            else
+                map.put(bag.menuName,cnt+1);
+
+            sum+=bag.getPrice();
+        }
+        for (String key: map.keySet())
+        {
+            int pay =0;
+            for(Order bag:shoppingBag){
+                if(key.equals(bag.menuName))
+                    pay=bag.price;
+            }
+            System.out.println(key+"      |"+map.get(key)+"|     "+ pay * map.get(key));
         }
         System.out.println("합계 : W"+sum);
         System.out.println("1. 주문하기     2. 메뉴판");
@@ -49,12 +82,16 @@ public class McKiosk {
         switch (i){
             case 1 ->{
                 watingCnt++;
+                for(Order bag: shoppingBag){
+                    sellingFood.add(new Order(bag.menuName, bag.price));
+                }
+                totalProfit += sum;
                 shoppingBag.clear();
                 System.out.println("주문 완료했습니다.");
                 System.out.println("대기번호는 "+ watingCnt +"번 입니다.");
                 System.out.println("잠시 뒤 메뉴판으로 이동됩니다...");
                 stat = status.CATEGORY;
-
+                Thread.sleep(3000);
                 //주문
             }
             case 2 ->{
@@ -66,7 +103,7 @@ public class McKiosk {
         }
 
     }
-    public void chooseOrder(){
+    public void chooseOrder(){          //주문할지 물어보는 페이지
         System.out.println("1. 주문하기       2. 돌아가기");
         int i = choose();
         if (i ==1){
@@ -86,20 +123,23 @@ public class McKiosk {
         }
 
     }
-    public int choose() {
+    public int choose() {   //입력받기 함수 int형을 리턴한다.
         System.out.print("선택 : ");
         Scanner sc = new Scanner(System.in);
         String result = sc.nextLine();
         return Integer.parseInt(result);
     }
 
-    public void chooseCategory() {
+    public void chooseCategory() {      //카테고리 중 선택시 메뉴 리스트를 초기화하고 다시 등록
         menu.printScreen();
         int choose = choose();
         num = choose;
 
         menu.getMenu().clear();
         switch (num) {  //initialize구문
+            case 0 ->{
+                stat = status.ADMIN;
+            }
             case 1 -> {
                 menu.getMenu().add(new BurgerMenu("베이컨 토마토 디럭스", "2장의 패티, 베이컨, 양상추, 토마토에 칠리 소스와 마요네즈가 들어간 버거.", 5500, 0));
                 menu.getMenu().add(new BurgerMenu("빅맥", "참깨빵위에 순쇠고기 패티두장 특별한 소스 양상추 치즈피클 양파까지.", 4600, 1));
@@ -132,7 +172,7 @@ public class McKiosk {
         }//버거 음료 사이드 메뉴선택
 
     }
-    public void chooseMenu(){
+    public void chooseMenu(){               //메뉴화면을 출력하고 주문을 선택
         System.out.println("===============메뉴============");
         for(int j =0;j<menu.getMenu().size();j++) {
             menu.getMenu().get(j).printScreen();
@@ -141,17 +181,6 @@ public class McKiosk {
         num = choose();
 
         chooseOrder();
-//        switch (num){
-//            case 1:
-//                menu.getMenu().get(0).printScreen();
-//                stat = status.ORDER;
-//                break;
-//            case 2:
-//                break;
-//            case 3:
-//                break;
-//            default:
-
 
     }
 }
