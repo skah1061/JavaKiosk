@@ -15,24 +15,55 @@ public class McKiosk {
     Menu menu = new Menu();
     ArrayList<Order> shoppingBag = new ArrayList<Order>();
     static status stat = status.CATEGORY;
-
+    int watingCnt = 0;
 
     public McKiosk() {
 
     }
 
-    public void KioskUse(){
-        menu.printScreen();
+    public void KioskUse() throws InterruptedException {
+
         if (stat == status.CATEGORY) {
-            chooseCategory(choose());
+            chooseCategory();
         }
         else if(stat == status.MENU) {
             chooseMenu();
         }
         else if(stat == status.ORDER){
-            //메뉴 장바구니
+            showOrder();
+            Thread.sleep(3000);
         }
 
+
+    }
+    public void showOrder() {
+        int sum = 0;
+        System.out.println("========장바구니========");
+        for (Order bag:shoppingBag){
+            bag.showOrderList();
+            sum += bag.getPrice();
+        }
+        System.out.println("합계 : W"+sum);
+        System.out.println("1. 주문하기     2. 메뉴판");
+        int i = choose();
+        switch (i){
+            case 1 ->{
+                watingCnt++;
+                shoppingBag.clear();
+                System.out.println("주문 완료했습니다.");
+                System.out.println("대기번호는 "+ watingCnt +"번 입니다.");
+                System.out.println("잠시 뒤 메뉴판으로 이동됩니다...");
+                stat = status.CATEGORY;
+
+                //주문
+            }
+            case 2 ->{
+                stat = status.CATEGORY;
+            }
+            default ->{
+                System.out.println("다시 선택해주세요.");
+            }
+        }
 
     }
     public void chooseOrder(){
@@ -62,7 +93,9 @@ public class McKiosk {
         return Integer.parseInt(result);
     }
 
-    public void chooseCategory(int choose) {
+    public void chooseCategory() {
+        menu.printScreen();
+        int choose = choose();
         num = choose;
 
         menu.getMenu().clear();
@@ -84,6 +117,13 @@ public class McKiosk {
                 menu.getMenu().add(new SideMenu("치킨 너겟", "순살치킨을 반죽과함께 튀긴요리", 2200, 1));
                 menu.getMenu().add(new SideMenu("스낵 랩", "소시지와 스모키 베이컨 소스, 베이컨, 양상추 등을 얇은 또띠아로 감싼 메뉴", 1500, 2));
                 stat = status.MENU;
+            }
+            case 4 ->{
+                stat = status.ORDER;
+            }
+            case 5 ->{
+                shoppingBag.clear();
+                System.out.println("주문 취소 되었습니다.");
             }
             default -> {
                 System.out.println("없는 번호 입니다.");

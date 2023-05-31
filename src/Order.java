@@ -9,5 +9,11 @@ public class Order {
         this.menuName = menuName;
         this.price = price;
     }
+    public void showOrderList(){
+        System.out.println(menuName +"   |   W"+ price);
+    }
 
+    public int getPrice() {
+        return price;
+    }
 }

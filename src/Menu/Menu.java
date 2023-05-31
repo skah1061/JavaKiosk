@@ -15,9 +15,12 @@ public class Menu {
 
     public void printScreen() {
         System.out.println("=========Category=========");
-        System.out.println("1. =========Burger========");
-        System.out.println("2. =========Drink=========");
-        System.out.println("3. =========Side==========");
+        System.out.println("1. Burger");
+        System.out.println("2. Drink");
+        System.out.println("3. Side");
+        System.out.println("========Order Menu========");
+        System.out.println("4. Order");
+        System.out.println("5. Cancel");
     }
 //    public BurgerMenu getBurgerMenu(){
 //        return burgerMenu;
