@@ -34,5 +34,12 @@ public class SideMenu extends Menu{
         System.out.println((count+1) +" "+name +" || W"+price);
         System.out.println("- "+desc);
     }
-
+    @Override
+    public String getName() {
+        return name;
+    }
+    @Override
+    public int getPrice(){
+        return price;
+    }
 }

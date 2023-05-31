@@ -33,4 +33,10 @@ public class Menu {
     public ArrayList<Menu> getMenu(){
         return menuArrayList;
     }
+    public String getName(){
+        return null;
+    }
+    public int getPrice(){
+        return 0;
+    }
 }

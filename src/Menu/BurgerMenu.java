@@ -36,5 +36,12 @@ public class BurgerMenu extends Menu{
         System.out.println("- "+desc);
     }
 
-
+    @Override
+    public String getName() {
+        return name;
+    }
+    @Override
+    public int getPrice(){
+        return price;
+    }
 }

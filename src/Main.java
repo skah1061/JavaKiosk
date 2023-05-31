@@ -1,10 +1,8 @@
 public class Main {
     public static void main(String[] args) {
         McKiosk mcKiosk = new McKiosk();
-        while(true) {
+        do {
             mcKiosk.KioskUse();
-            if(mcKiosk.num == 0)
-                break;
-        }
+        } while (mcKiosk.num != 0);
     }
 }
