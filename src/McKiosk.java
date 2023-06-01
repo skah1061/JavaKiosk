@@ -34,7 +34,6 @@ public class McKiosk {
         }
         else if(stat == status.ORDER){
             showOrder();
-
         }
         else if (stat== status.ADMIN){
             showAdminstor();
@@ -74,7 +73,7 @@ public class McKiosk {
                 if(key.equals(bag.menuName))
                     pay=bag.price;
             }
-            System.out.println(key+"      |"+map.get(key)+"|     "+ pay * map.get(key));
+            System.out.println(key+"      |"+map.get(key)+"|     W"+ pay * map.get(key));
         }
         System.out.println("합계 : W"+sum);
         System.out.println("1. 주문하기     2. 메뉴판");
@@ -181,6 +180,8 @@ public class McKiosk {
         num = choose();
 
         chooseOrder();
+        ////////
+       
 
     }
 }
