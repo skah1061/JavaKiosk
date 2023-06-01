@@ -44,7 +44,7 @@ public class McKiosk {
     public void showAdminstor(){    //Admin페이지
         System.out.println("===총 판매 현황===");
         for(Order food:sellingFood){
-            System.out.println(food.menuName+" -- W"+food.price);
+            System.out.println(String.format("%-18s  W%,d,",food.menuName,food.price));
         }
 
         System.out.println("총 수익 : W"+ totalProfit);
@@ -73,7 +73,9 @@ public class McKiosk {
                 if(key.equals(bag.menuName))
                     pay=bag.price;
             }
-            System.out.println(key+"      |"+map.get(key)+"|     W"+ pay * map.get(key));
+            System.out.print(String.format("%-18s|%d개|%8s",key,map.get(key),""));
+            System.out.println(String.format("W%,d",pay*map.get(key)));
+
         }
         System.out.println("합계 : W"+sum);
         System.out.println("1. 주문하기     2. 메뉴판");
@@ -181,7 +183,7 @@ public class McKiosk {
 
         chooseOrder();
         ////////
-       
+
 
     }
 }

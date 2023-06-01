@@ -31,7 +31,7 @@ public class DrinkMenu extends Menu{
     }
    @Override
    public void printScreen() {
-       System.out.println((count+1) +" "+name +" || W"+price);
+       System.out.println(String.format("%d. %-18s ||W%,d",(count+1),name,price));
        System.out.println("- "+desc);
    }
    @Override
